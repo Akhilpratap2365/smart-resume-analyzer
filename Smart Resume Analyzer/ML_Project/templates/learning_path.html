@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Learning Path</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Personalized Learning Path</h1>
+
+    <h3>Target Role</h3>
+    <p class="highlight">{{ target_role }}</p>
+
+    <h3>Your Current Skills</h3>
+    <ul>
+        {% for skill in current_skills %}
+            <li>{{ skill | format_skill }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Skills You Are Willing to Learn</h3>
+    <ul>
+        {% for skill in willing_skills %}
+            <li>{{ skill | format_skill }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Recommended Skills to Learn Next</h3>
+    {% if missing_skills %}
+        <ul>
+            {% for skill in missing_skills %}
+                <li>{{ skill | format_skill }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="highlight">You are on the right track 🎉</p>
+    {% endif %}
+
+    <!-- 🔥 NEW: SKILL GAP CHART -->
+    <h3>Skill Gap Visualization</h3>
+    <img 
+        src="{{ url_for('static', filename='charts/skill_gap.png') }}"
+        alt="Skill Gap Chart"
+        style="
+            width:100%;
+            margin-top:15px;
+            border-radius:18px;
+            box-shadow:0 15px 40px rgba(0,0,0,0.35);
+        "
+    >
+
+    <a href="/">Go Back</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Resume | Smart Resume Analyzer{% endblock %}
+
+{% block extra_css %}
+<style>
+    .upload-container { max-width: 800px; margin: 60px auto; padding: 0 60px; }
+    .upload-container h2 { font-size: 48px; margin-bottom: 10px; color: #a855f7; text-align: center; }
+    .upload-container p { color: #bbb; text-align: center; margin-bottom: 40px; }
+    
+    .upload-box {
+        background: rgba(168, 85, 247, 0.05);
+        border: 2px dashed rgba(168, 85, 247, 0.5);
+        border-radius: 15px;
+        padding: 60px 40px;
+        text-align: center;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+    .upload-box:hover {
+        background: rgba(168, 85, 247, 0.1);
+        border-color: #a855f7;
+    }
+    
+    .upload-box i { font-size: 48px; color: #a855f7; margin-bottom: 20px; display: block; }
+    .upload-box h3 { font-size: 24px; margin-bottom: 10px; }
+    .upload-box p { color: #aaa; }
+    
+    input[type="file"] { display: none; }
+    
+    .btn-upload {
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        padding: 12px 30px;
+        border-radius: 8px;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        transition: all 0.3s;
+        margin-top: 20px;
+    }
+    .btn-upload:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(168, 85, 247, 0.3); }
+    
+    .success { background: rgba(34, 197, 94, 0.1); color: #86efac; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+    .error { background: rgba(239, 68, 68, 0.1); color: #fca5a5; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+    
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 60px; }
+    .feature { background: rgba(168, 85, 247, 0.05); padding: 30px; border-radius: 12px; border: 1px solid rgba(168, 85, 247, 0.2); text-align: center; }
+    .feature i { font-size: 36px; color: #a855f7; margin-bottom: 15px; }
+    .feature h4 { margin-bottom: 10px; }
+    .feature p { color: #aaa; font-size: 14px; }
+    
+    @media (max-width: 768px) {
+        .upload-container { padding: 0 20px; }
+        .upload-box { padding: 40px 20px; }
+        .features { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="upload-container">
+    <h2>Upload Your Resume</h2>
+    <p>Get instant analysis of your resume and career insights</p>
+    
+    {% if error %}
+    <div class="error"><i class="fas fa-exclamation-circle"></i> {{ error }}</div>
+    {% endif %}
+    
+    <form method="POST" enctype="multipart/form-data" class="upload-form">
+        {% csrf_token %}
+        <div class="upload-box" onclick="document.getElementById('resume-input').click();">
+            <i class="fas fa-file-upload"></i>
+            <h3>Drag and Drop Your Resume</h3>
+            <p>or click to browse (PDF format)</p>
+            <input type="file" id="resume-input" name="resume" accept=".pdf" required onchange="document.querySelector('.upload-form').submit();">
+        </div>
+    </form>
+    
+    <div class="features">
+        <div class="feature">
+            <i class="fas fa-check-circle"></i>
+            <h4>ATS Scoring</h4>
+            <p>See how your resume performs with Applicant Tracking Systems</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-lightbulb"></i>
+            <h4>Skill Analysis</h4>
+            <p>Discover your strengths and key competencies</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-graduation-cap"></i>
+            <h4>Career Path</h4>
+            <p>Get personalized recommendations for growth</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

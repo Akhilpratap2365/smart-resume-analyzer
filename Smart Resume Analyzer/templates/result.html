@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis Results | Pr Tech{% endblock %}
+
+{% block extra_css %}
+<style>
+    .results-container { max-width: 1000px; margin: 60px auto; padding: 0 60px; }
+    .results-container h2 { font-size: 42px; margin-bottom: 30px; color: #a855f7; }
+    
+    .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 50px; }
+    
+    .result-card {
+        background: rgba(168, 85, 247, 0.05);
+        border: 1px solid rgba(168, 85, 247, 0.2);
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+    }
+    
+    .result-card h3 { color: #a855f7; font-size: 14px; text-transform: uppercase; margin-bottom: 15px; }
+    .result-card .value { font-size: 48px; font-weight: 700; margin-bottom: 10px; }
+    .result-card .role { font-size: 22px; font-weight: 600; color: #fff; }
+
+    .score-high { color: #22c55e; }
+    .score-medium { color: #f59e0b; }
+    .score-low { color: #ef4444; }
+    
+    .skills-section {
+        background: rgba(168, 85, 247, 0.05);
+        border: 1px solid rgba(168, 85, 247, 0.2);
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .skills-section h3 { font-size: 24px; margin-bottom: 20px; color: #a855f7; }
+    
+    .skills-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .skill-tag {
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .missing-tag {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .button-group { display: flex; gap: 15px; justify-content: center; margin-top: 40px; }
+    .btn { display: inline-block; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s; border: none; cursor: pointer; }
+    .btn-primary { background: linear-gradient(135deg, #7c3aed, #a855f7); color: #fff; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(168, 85, 247, 0.3); }
+    .btn-secondary { background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); color: #a855f7; }
+    .btn-secondary:hover { background: rgba(168, 85, 247, 0.2); }
+    
+    @media (max-width: 768px) {
+        .results-container { padding: 0 20px; }
+        .results-grid { grid-template-columns: 1fr; }
+        .button-group { flex-direction: column; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="results-container">
+    <h2>Resume Analysis Complete!</h2>
+    
+    <div class="results-grid">
+        <div class="result-card">
+            <h3>ATS Score</h3>
+
+            {% if ats_score >= 70 %}
+                <div class="value score-high">{{ ats_score }}</div>
+            {% elif ats_score >= 40 %}
+                <div class="value score-medium">{{ ats_score }}</div>
+            {% else %}
+                <div class="value score-low">{{ ats_score }}</div>
+            {% endif %}
+
+            <p>ATS Compatibility</p>
+        </div>
+
+        <div class="result-card">
+            <h3>Predicted Role</h3>
+            <div class="role">{{ role|default:"Analysis pending" }}</div>
+        </div>
+
+        <div class="result-card">
+            <h3>Estimated Salary</h3>
+            <div class="value">{{ salary|default:"N/A" }}</div>
+        </div>
+    </div>
+    
+    {% if skills %}
+    <div class="skills-section">
+        <h3>Identified Skills</h3>
+        <div class="skills-list">
+            {% for skill in skills %}
+            <span class="skill-tag">{{ skill }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if missing_skills %}
+    <div class="skills-section">
+        <h3>Missing Skills (Improve Your Resume)</h3>
+        <div class="skills-list">
+            {% for skill in missing_skills %}
+            <span class="missing-tag">{{ skill }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="button-group">
+        <a href="/upload-resume/" class="btn btn-primary">Upload Another Resume</a>
+        <a href="/learning-path/?role={{ role|urlencode }}&skills={{ skills|join:',' }}" class="btn btn-secondary">Get Learning Path</a>
+    </div>
+</div>
+{% endblock %}

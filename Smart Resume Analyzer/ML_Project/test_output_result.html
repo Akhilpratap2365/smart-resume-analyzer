@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Career Result</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Career Analysis Result</h1>
+
+    <h3>Your Skills</h3>
+    <ul>
+        
+            <li>Python</li>
+        
+            <li>Java</li>
+        
+            <li>C</li>
+        
+            <li>SQL</li>
+        
+            <li>JavaScript</li>
+        
+            <li>AWS</li>
+        
+            <li>Docker</li>
+        
+    </ul>
+
+    <h3>Predicted Job Role</h3>
+    <p class="highlight">Data Scientist</p>
+
+    <h3>Expected Salary</h3>
+    <p class="highlight">₹ 720000</p>
+
+    <h3>ATS Resume Score</h3>
+    <div class="progress-container">
+        <div class="progress-bar" style="width: 60%;">
+            60%
+        </div>
+    </div>
+
+    <!-- SUMMARY CARD -->
+    <div style="margin-top:18px;padding:14px;border-radius:12px;background:rgba(255,255,255,0.06);">
+        <h2 style="margin-bottom:8px;color:#fff;">Resume Analysis Complete!</h2>
+
+        <div style="display:flex;gap:12px;flex-direction:column;align-items:flex-start;">
+            <div><strong style="color:#ffeb3b;">Predicted Role:</strong> <span style="color:#fff;">Data Scientist</span></div>
+            <div><strong style="color:#ffeb3b;">Estimated Salary:</strong> <span style="color:#fff;">₹ 720000</span></div>
+            <div><strong style="color:#ffeb3b;">Identified Skills:</strong>
+                <span style="color:#fff;margin-left:8px;">Python, Java, C, SQL, JavaScript, AWS, Docker</span>
+            </div>
+
+            <div style="width:100%;">
+                <label style="display:block;margin-top:8px;color:#fff;font-weight:600;">Choose Role You Want</label>
+                <select id="targetSelectVisible" style="width:100%;padding:10px;border-radius:8px;border:none;margin-top:6px;" >
+                    <option value="">Let the analyzer decide</option>
+                    <option>Data Analyst</option>
+                    <option>Data Scientist</option>
+                    <option>ML Engineer</option>
+                    <option>Frontend Developer</option>
+                    <option>Backend Developer</option>
+                    <option>Full Stack Developer</option>
+                    <option>DevOps Engineer</option>
+                </select>
+            </div>
+
+            <div style="display:flex;gap:8px;width:100%;">
+                <button id="getPathBtn" class="primary-btn" style="flex:1;">Get Learning Path</button>
+                <a href="/" class="primary-btn" style="flex:1;text-align:center;text-decoration:none;display:inline-block;">Upload Another Resume</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔥 LEARNING PATH -->
+    <h3>Choose Career Path You Want</h3>
+
+    <form action="/learning-path" method="post" class="learning-form" id="learningForm">
+        <input type="hidden" name="skills" value="Python,Java,C,SQL,JavaScript,AWS,Docker">
+        <input type="hidden" name="target_role" id="targetRoleInput" required value="Data Scientist">
+
+        <h3>Select Career Path</h3>
+
+        <!-- VISIBLE NATIVE SELECT (keeps parity with summary select) -->
+        <select id="targetSelect" style="width:100%;padding:12px;border-radius:12px;border:none;margin-top:8px;">
+            <option value="">Let the analyzer decide</option>
+            <option>Data Analyst</option>
+            <option>Data Scientist</option>
+            <option>ML Engineer</option>
+            <option>Frontend Developer</option>
+            <option>Backend Developer</option>
+            <option>Full Stack Developer</option>
+            <option>DevOps Engineer</option>
+        </select>
+
+        <!-- CUSTOM DROPDOWN -->
+        <div class="dropdown">
+            <div class="dropdown-selected" id="selectedRole">
+                Data Scientist
+            </div>
+
+            <div class="dropdown-options">
+                <div class="option" data-value="Data Analyst">Data Analyst</div>
+                <div class="option" data-value="Data Scientist">Data Scientist</div>
+                <div class="option" data-value="ML Engineer">ML Engineer</div>
+                <div class="option" data-value="Frontend Developer">Frontend Developer</div>
+                <div class="option" data-value="Backend Developer">Backend Developer</div>
+                <div class="option" data-value="Full Stack Developer">Full Stack Developer</div>
+                <div class="option" data-value="DevOps Engineer">DevOps Engineer</div>
+            </div>
+        </div>
+
+        <h3>Skills You Are Willing to Learn</h3>
+
+        <!-- 🔥 FILTERED SKILLS (NO DUPLICATES) -->
+        <div style="margin-bottom:12px; display:flex; gap:8px; align-items:center;">
+            <input id="customSkillInput" type="text" placeholder="Add a custom skill (e.g. React)" style="flex:1;padding:8px;border-radius:6px;border:1px solid #ccc;">
+            <button type="button" id="addSkillBtn" class="primary-btn" style="padding:8px 12px;">Add</button>
+        </div>
+        <div class="skill-grid">
+
+            
+
+            
+
+            
+            <label class="skill-box">
+                <input type="checkbox" name="willing_skills" value="machine learning" >
+                <span>Machine Learning</span>
+            </label>
+            
+
+            
+            <label class="skill-box">
+                <input type="checkbox" name="willing_skills" value="excel" >
+                <span>Excel</span>
+            </label>
+            
+
+            
+            <label class="skill-box">
+                <input type="checkbox" name="willing_skills" value="power bi" >
+                <span>Power BI</span>
+            </label>
+            
+
+            
+
+            
+
+        </div>
+
+        <button type="submit" class="primary-btn">
+            Get Personalized Learning Path 🚀
+        </button>
+    </form>
+
+    <a href="/">Analyze another resume</a>
+</div>
+
+<!-- 🔥 DROPDOWN SCRIPT -->
+<script>
+    const selected = document.getElementById("selectedRole");
+    const options = document.querySelector(".dropdown-options");
+    const hiddenInput = document.getElementById("targetRoleInput");
+    const addBtn = document.getElementById("addSkillBtn");
+    const customInput = document.getElementById("customSkillInput");
+    const skillGrid = document.querySelector('.skill-grid');
+
+    // Known skills from backend (lowercase)
+    const knownSkills = ["python", "java", "c", "sql", "javascript", "aws", "docker"];
+    const preWilling = ["python", "sql"];
+
+    // initialize visible selects with chosen role
+    const visibleSelect = document.getElementById('targetSelectVisible');
+    const formSelect = document.getElementById('targetSelect');
+    if ("Data Scientist") {
+        // try to set select if role matches an option
+        Array.from(formSelect.options).forEach(opt => { if (opt.text === "Data Scientist") opt.selected = true; });
+        Array.from(visibleSelect.options).forEach(opt => { if (opt.text === "Data Scientist") opt.selected = true; });
+    }
+
+    // sync selects to hidden input
+    function syncSelectToHidden(sel){
+        const val = sel.value || sel.options[sel.selectedIndex].text || '';
+        // if user chooses the empty option, we keep analyzer decision
+        if (val === '') {
+            hiddenInput.value = "Data Scientist";
+        } else {
+            hiddenInput.value = val;
+        }
+        // also update dropdown-selected display when present
+        const ds = document.getElementById('selectedRole');
+        if (ds) ds.textContent = hiddenInput.value;
+    }
+
+    formSelect.addEventListener('change', (e)=> syncSelectToHidden(e.target));
+    visibleSelect.addEventListener('change', (e)=> { syncSelectToHidden(e.target); formSelect.value = e.target.value; });
+
+    selected.addEventListener("click", () => {
+        options.style.display = options.style.display === "block" ? "none" : "block";
+    });
+
+    document.querySelectorAll(".option").forEach(option => {
+        option.addEventListener("click", () => {
+            selected.textContent = option.textContent;
+            hiddenInput.value = option.dataset.value;
+            options.style.display = "none";
+        });
+    });
+
+    // Add custom skill to the skill grid as a checkbox
+    addBtn.addEventListener('click', () => {
+        const val = customInput.value.trim();
+        if (!val) return;
+
+        const lower = val.toLowerCase();
+
+        // prevent duplicates with known skills
+        if (knownSkills.includes(lower)) {
+            alert('This skill is already detected in your resume.');
+            customInput.value = '';
+            return;
+        }
+
+        // prevent duplicate additions
+        if (Array.from(document.querySelectorAll('input[name="willing_skills"]')).some(i => i.value === lower)) {
+            customInput.value = '';
+            return;
+        }
+
+        const label = document.createElement('label');
+        label.className = 'skill-box';
+
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.name = 'willing_skills';
+        input.value = lower;
+        input.checked = true;
+
+        const span = document.createElement('span');
+        span.textContent = val;
+
+        label.appendChild(input);
+        label.appendChild(span);
+
+        skillGrid.appendChild(label);
+        customInput.value = '';
+    });
+
+    // pre-check any skills the user selected on upload
+    if (preWilling && preWilling.length){
+        preWilling.forEach(s => {
+            const el = document.querySelector('input[name="willing_skills"][value="'+s+'"]');
+            if (el) el.checked = true;
+        });
+    }
+
+    // Get Learning Path button in summary submits the learning form
+    const getPathBtn = document.getElementById('getPathBtn');
+    if (getPathBtn){
+        getPathBtn.addEventListener('click', ()=>{
+            // ensure hidden input is synced
+            syncSelectToHidden(visibleSelect);
+            document.getElementById('learningForm').submit();
+        });
+    }
+
+    document.addEventListener("click", (e) => {
+        if (!e.target.closest(".dropdown")) {
+            options.style.display = "none";
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+
+{% block title %}Learning Path | Pr Tech{% endblock %}
+
+{% block extra_css %}
+<style>
+    .learning-container { max-width: 1000px; margin: 60px auto; padding: 0 60px; }
+    .learning-container h2 { font-size: 42px; margin-bottom: 10px; color: #a855f7; }
+    .learning-container .subtitle { color: #bbb; margin-bottom: 40px; font-size: 16px; }
+    
+    .current-skills {
+        background: rgba(168, 85, 247, 0.05);
+        border: 1px solid rgba(168, 85, 247, 0.2);
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 40px;
+    }
+    
+    .current-skills h3 { font-size: 20px; margin-bottom: 20px; color: #a855f7; }
+    .skills-list { display: flex; flex-wrap: wrap; gap: 12px; }
+    .skill-tag {
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .recommendations {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+    
+    .recommendation-card {
+        background: rgba(168, 85, 247, 0.05);
+        border: 1px solid rgba(168, 85, 247, 0.2);
+        border-radius: 15px;
+        padding: 25px;
+        transition: all 0.3s;
+    }
+    
+    .recommendation-card:hover {
+        background: rgba(168, 85, 247, 0.1);
+        transform: translateY(-5px);
+    }
+    
+    .recommendation-card .level {
+        display: inline-block;
+        background: #a855f7;
+        color: #fff;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+    
+    .recommendation-card h4 { font-size: 18px; margin-bottom: 10px; color: #fff; }
+    .recommendation-card p { color: #aaa; line-height: 1.6; margin-bottom: 15px; }
+    
+    .resources {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .resource {
+        background: rgba(255,255,255,0.05);
+        padding: 10px 15px;
+        border-radius: 8px;
+        border-left: 3px solid #a855f7;
+        color: #bbb;
+        font-size: 14px;
+    }
+    
+    .timeline {
+        background: rgba(168, 85, 247, 0.05);
+        border: 1px solid rgba(168, 85, 247, 0.2);
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 40px;
+    }
+    
+    .timeline h3 { font-size: 20px; margin-bottom: 25px; color: #a855f7; }
+    
+    .timeline-item {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 25px;
+        padding-bottom: 25px;
+        border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+    }
+    
+    .timeline-item:last-child { border-bottom: none; }
+    
+    .timeline-marker {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-weight: bold;
+    }
+    
+    .timeline-content h4 { margin-bottom: 5px; }
+    .timeline-content p { color: #aaa; }
+    
+    .button-group { display: flex; gap: 15px; justify-content: center; margin-top: 40px; }
+    .btn { display: inline-block; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s; border: none; cursor: pointer; }
+    .btn-primary { background: linear-gradient(135deg, #7c3aed, #a855f7); color: #fff; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(168, 85, 247, 0.3); }
+    
+    .error-message {
+        background: rgba(239, 68, 68, 0.1);
+        color: #fca5a5;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+    }
+    
+    @media (max-width: 768px) {
+        .learning-container { padding: 0 20px; }
+        .recommendations { grid-template-columns: 1fr; }
+        .button-group { flex-direction: column; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="learning-container">
+    <h2><i class="fas fa-graduation-cap"></i> Your Learning Path</h2>
+    <p class="subtitle">Personalized recommendations to advance your career</p>
+    
+    {% if error %}
+    <div class="error-message">
+        <i class="fas fa-exclamation-circle"></i> {{ error }}
+    </div>
+    {% endif %}
+    
+    {% if current_skills %}
+    <div class="current-skills">
+        <h3><i class="fas fa-check-circle"></i> Your Current Skills</h3>
+        <div class="skills-list">
+            {% for skill in current_skills %}
+            <span class="skill-tag">{{ skill }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if target_role %}
+    <div class="timeline">
+        <h3><i class="fas fa-road"></i> Recommended Learning Path for <strong>{{ target_role }}</strong></h3>
+        
+        <div class="timeline-item">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <h4>Assess Your Current Level (Week 1)</h4>
+                <p>Evaluate your existing skills and identify gaps. Take online assessments to understand your baseline knowledge.</p>
+            </div>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-marker">2</div>
+            <div class="timeline-content">
+                <h4>Learn Core Fundamentals (Weeks 2-4)</h4>
+                <p>Focus on core technical and soft skills required for {{ target_role }}. Use structured courses and tutorials.</p>
+                <div class="resources">
+                    <div class="resource"><i class="fas fa-book"></i> Take online courses on platforms like Coursera, Udemy, or LinkedIn Learning</div>
+                    <div class="resource"><i class="fas fa-video"></i> Watch tutorial videos and documentation</div>
+                    <div class="resource"><i class="fas fa-pencil-alt"></i> Take detailed notes and create study materials</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-marker">3</div>
+            <div class="timeline-content">
+                <h4>Practice & Build Projects (Weeks 5-8)</h4>
+                <p>Apply what you've learned by building real-world projects. This strengthens your portfolio.</p>
+                <div class="resources">
+                    <div class="resource"><i class="fas fa-code"></i> Build 2-3 portfolio projects</div>
+                    <div class="resource"><i class="fas fa-github"></i> Contribute to open-source projects</div>
+                    <div class="resource"><i class="fas fa-flask"></i> Complete coding challenges and exercises</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-marker">4</div>
+            <div class="timeline-content">
+                <h4>Gain Experience (Weeks 9-12)</h4>
+                <p>Get hands-on experience through internships, freelance work, or personal projects.</p>
+                <div class="resources">
+                    <div class="resource"><i class="fas fa-briefcase"></i> Apply for internships or entry-level positions</div>
+                    <div class="resource"><i class="fas fa-network-wired"></i> Network with professionals in your field</div>
+                    <div class="resource"><i class="fas fa-handshake"></i> Collaborate with other developers</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-marker">5</div>
+            <div class="timeline-content">
+                <h4>Continue Learning & Growth</h4>
+                <p>Keep learning advanced topics, new technologies, and best practices in your field.</p>
+                <div class="resources">
+                    <div class="resource"><i class="fas fa-star"></i> Stay updated with industry trends</div>
+                    <div class="resource"><i class="fas fa-certificate"></i> Pursue certifications</div>
+                    <div class="resource"><i class="fas fa-microscope"></i> Explore advanced topics and specializations</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="recommendations">
+        <div class="recommendation-card">
+            <span class="level">Recommended</span>
+            <h4><i class="fas fa-book"></i> Online Courses</h4>
+            <p>Structured learning paths from platforms like Coursera, Udemy, or LinkedIn Learning designed for professionals.</p>
+            <div class="resources">
+                <div class="resource">Coursera - Professional Certificates</div>
+                <div class="resource">Udemy - In-depth course libraries</div>
+                <div class="resource">LinkedIn Learning - Career-focused content</div>
+            </div>
+        </div>
+        
+        <div class="recommendation-card">
+            <span class="level">Essential</span>
+            <h4><i class="fas fa-code"></i> Hands-on Projects</h4>
+            <p>Build real-world projects to apply your knowledge and create a strong portfolio.</p>
+            <div class="resources">
+                <div class="resource">GitHub - Version control & portfolio</div>
+                <div class="resource">Kaggle - Data science projects</div>
+                <div class="resource">LeetCode - Coding challenges</div>
+            </div>
+        </div>
+        
+        <div class="recommendation-card">
+            <span class="level">Important</span>
+            <h4><i class="fas fa-users"></i> Community & Networking</h4>
+            <p>Connect with like-minded professionals, attend meetups, and participate in communities.</p>
+            <div class="resources">
+                <div class="resource">Meetup.com - Local tech communities</div>
+                <div class="resource">Discord/Slack communities - Real-time support</div>
+                <div class="resource">LinkedIn - Professional networking</div>
+            </div>
+        </div>
+        
+        <div class="recommendation-card">
+            <span class="level">Beneficial</span>
+            <h4><i class="fas fa-certificate"></i> Certifications</h4>
+            <p>Industry-recognized certifications to validate your skills and boost your resume.</p>
+            <div class="resources">
+                <div class="resource">AWS, Google Cloud, Azure certifications</div>
+                <div class="resource">Vendor-specific certifications</div>
+                <div class="resource">Professional credentials in your field</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="button-group">
+        <a href="/upload-resume/" class="btn btn-primary"><i class="fas fa-upload"></i> Upload Another Resume</a>
+    </div>
+</div>
+{% endblock %}

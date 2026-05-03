@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Career Recommendation Engine</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Smart Career Recommendation Engine</h1>
+    <p>Upload your resume (PDF) to get career insights</p>
+
+   <form action="/upload" method="post" enctype="multipart/form-data">
+    
+    <label class="file-upload">
+        <input type="file" name="resume" accept=".pdf" required>
+        <span>📄 Upload Resume (PDF)</span>
+    </label>
+
+    <h3>Select Desired Career Path (optional)</h3>
+    <select name="target_role">
+        <option value="">Let the analyzer decide</option>
+        <option>Data Analyst</option>
+        <option>Data Scientist</option>
+        <option>ML Engineer</option>
+        <option>Frontend Developer</option>
+        <option>Backend Developer</option>
+        <option>Full Stack Developer</option>
+        <option>DevOps Engineer</option>
+    </select>
+
+    <h3>Skills You're Willing to Learn (optional)</h3>
+    <div class="skill-grid">
+        <label class="skill-box"><input type="checkbox" name="willing_skills" value="python"><span>Python</span></label>
+        <label class="skill-box"><input type="checkbox" name="willing_skills" value="sql"><span>SQL</span></label>
+        <label class="skill-box"><input type="checkbox" name="willing_skills" value="machine learning"><span>Machine Learning</span></label>
+        <label class="skill-box"><input type="checkbox" name="willing_skills" value="excel"><span>Excel</span></label>
+        <label class="skill-box"><input type="checkbox" name="willing_skills" value="power bi"><span>Power BI</span></label>
+        <label class="skill-box"><input type="checkbox" name="willing_skills" value="aws"><span>AWS</span></label>
+    </div>
+
+    <button type="submit" class="primary-btn">
+        Analyze Resume 🚀
+    </button>
+</form>
+
+</div>
+
+</body>
+</html>
