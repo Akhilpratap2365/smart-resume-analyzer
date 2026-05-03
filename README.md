@@ -14,6 +14,8 @@ Make sure you have the following installed:
 
 * Python (3.x recommended)
 * pip (Python package manager)
+* FLASK
+* Django
 
 ---
 
