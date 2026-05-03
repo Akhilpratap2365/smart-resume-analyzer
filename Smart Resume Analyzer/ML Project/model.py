@@ -1,6 +1,6 @@
 def predict_job_role(skills):
     skills = [s.lower() for s in skills]
-
+#Skills
     roles = {
         "Frontend Developer": [
             "html", "css", "javascript", "react", "angular"
