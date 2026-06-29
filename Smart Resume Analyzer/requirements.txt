@@ -1,0 +1,8 @@
+Django==6.0.1
+gunicorn
+whitenoise
+pandas
+scikit-learn
+matplotlib
+seaborn
+PyPDF2
